@@ -65,3 +65,36 @@
     }
   }
 }
+
+.sequencer {
+  &-clickable {
+    cursor: pointer;
+
+    &-red {
+      cursor: pointer;
+      color: red;
+    }
+
+    &-green {
+      cursor: pointer;
+      color: green;
+    }
+
+    &-link {
+      cursor: pointer;
+
+      &-disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+      }
+    }
+
+    &-green:hover {
+      text-shadow: 0 0 8px rgba(0, 125, 0, 1);
+    }
+
+    &-link:hover {
+      text-shadow: 0 0 8px rgba(255, 0, 0, 1);
+    }
+  }
+}

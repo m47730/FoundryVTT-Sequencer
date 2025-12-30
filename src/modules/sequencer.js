@@ -55,7 +55,7 @@ export default class Sequence {
 				SOCKET_HANDLERS.RUN_SEQUENCE_LOCALLY,
 				data
 			);
-			return new Sequence().fromJSON(data).play();
+			return new Sequence().fromJSON(data).play({ local: true });
 		}
 		Hooks.callAll("createSequencerSequence", this);
 		lib.debug("Initializing sections");

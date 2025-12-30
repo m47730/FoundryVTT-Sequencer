@@ -31,9 +31,10 @@ import SequencerFoundryReplicator from "./modules/sequencer-foundry-replicator.j
 import SequencerSoundManager from "./modules/sequencer-sound-manager.js";
 import Crosshair from "./modules/sequencer-crosshair/sequencer-crosshair.js";
 import { TJSPosition } from "#runtime/svelte/store/position";
-import { SvelteApplication } from "#runtime/svelte/application";
+import { SvelteApplication, TJSDialog } from "#runtime/svelte/application";
 import PluginsManager from "./utils/plugins-manager.js";
 import FoundryShim from "./utils/foundry-shim.js";
+import SupportDialog from "./formapplications/support-dialog.svelte";
 
 let moduleValid = false;
 let moduleReady = false;
@@ -194,23 +195,47 @@ function initializeModule() {
 	PluginsManager.initialize();
 }
 
+
 Hooks.once("ready", async () => {
+  displaySupportDialog();
+  displaySequencerWelcome();
+});
 
-	const version = game.settings.get(CONSTANTS.MODULE_NAME, "welcome-shown-version")
+async function displaySupportDialog() {
 
-	if(!game.user.isGM || !foundry.utils.isNewerVersion(version, game.version)) return;
-	await game.settings.set(CONSTANTS.MODULE_NAME, "welcome-shown-version", game.version);
+  const shown = game.settings.get(CONSTANTS.MODULE_NAME, "support-dialog-shown")
+  if (!game.user.isGM || shown) return;
+  await game.settings.set(CONSTANTS.MODULE_NAME, "support-dialog-shown", true);
 
-	const chatMessages = game.messages.filter(message => {
-		return message.content.includes("sequencer-welcome")
-	}).map(message => message.id);
+  return TJSDialog.prompt({
+    title: "Sequencer",
+    label: 'Okay',
+    content: {
+      class: SupportDialog,
+    }
+  }, {
+    height: "auto",
+    width: 500
+  });
+}
 
-	if(chatMessages.length){
-		return ChatMessage.deleteDocuments(chatMessages.slice(0, -1))
-	}
+async function displaySequencerWelcome() {
 
-	await ChatMessage.create({
-		content: `
+  const version = game.settings.get(CONSTANTS.MODULE_NAME, "welcome-shown-version")
+
+  if(!game.user.isGM || !foundry.utils.isNewerVersion(version, game.version)) return;
+  await game.settings.set(CONSTANTS.MODULE_NAME, "welcome-shown-version", game.version);
+
+  const chatMessages = game.messages.filter(message => {
+    return message.content.includes("sequencer-welcome")
+  }).map(message => message.id);
+
+  if(chatMessages.length){
+    await ChatMessage.deleteDocuments(chatMessages.slice(0, -1))
+  }
+
+  await ChatMessage.create({
+    content: `
 <div class="sequencer-welcome">
 <img src="modules/sequencer/images/sequencer.png"/>
 <div class="sequencer-divider"></div>
@@ -219,8 +244,9 @@ Hooks.once("ready", async () => {
 <div class="sequencer-divider"></div>
 <p><a target="_blank" href="https://fantasycomputer.works/">Website</a> | <a target="_blank" href="https://fantasycomputer.works/FoundryVTT-Sequencer/#/">Docs</a> | <a target="_blank" href="https://discord.gg/qFHQUwBZAz">Discord</a> | <a target="_blank" href="https://ko-fi.com/fantasycomputerworks">Donate</a></p>
 </div>`,
-	});
+  });
 
-});
+}
+
 
 Hooks.once("monaco-editor.ready", registerTypes);

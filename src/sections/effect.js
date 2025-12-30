@@ -2181,10 +2181,12 @@ export default class EffectSection extends Section {
 		this._mirrorX = this._mirrorX || (this._randomMirrorX && Math.random() < 0.5)
 		this._mirrorY = this._mirrorY || (this._randomMirrorY && Math.random() < 0.5)
 
-		if (this._copySprite) {
-			this._file = this._file || this._copySprite.object?.ring?.enabled ?
-				this._copySprite.object?.ring?.subject?.texture || this._copySprite.object?.texture?.src :
-				this._copySprite.object?.texture?.src;
+		if (this._copySprite && !this._file) {
+      this._file = (
+        this._copySprite.object?.ring?.enabled
+          ? this._copySprite.object?.ring?.subject?.texture || this._copySprite.object?.texture?.src
+          : this._copySprite.object?.texture?.src
+      );
 
 			if (this._source === null) {
 				this._source = this._validateLocation(this._copySprite.object);

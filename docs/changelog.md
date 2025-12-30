@@ -1,5 +1,10 @@
 ## Changelog
 
+# Version 3.6.11
+- *Sequencer* - Fixed `remote` on `.play()` not forcing local on the executing user's machine
+- *Sequencer* - Added a one-time dialog promoting our patreon
+- *Effects* - Fixed `.copySprite()` using the wrong texture with `.file()` being set
+
 # Version 3.6.10
 - *Effects* - Fixed `.copySprite()` not copying dynamic token rings (thank you ChasarooniZ on github!)
 - *Effects* - Fixed `.rotateTowards()` with `attach: true` not working properly (thank you RobinCodesStuff on github!)

@@ -104,6 +104,13 @@ export function registerSettings() {
     type: Boolean,
   });
 
+  game.settings.register(CONSTANTS.MODULE_NAME, "support-dialog-shown", {
+    scope: "world",
+    config: false,
+    default: false,
+    type: Boolean,
+  });
+
   game.settings.register(CONSTANTS.MODULE_NAME, "welcome-shown-version", {
     scope: "world",
     config: false,
