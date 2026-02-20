@@ -35,7 +35,7 @@ export default ({ mode }) => {
 	/** @type {import('vite').UserConfig} */
 	return {
 		root: 'src/',                    // Source location / esbuild root.
-		base: `/${s_PACKAGE_ID}/dist`,   // Base module path that 29999 / served dev directory.
+		base: `./${s_PACKAGE_ID}/dist`,  // Base module path that 29999 / served dev directory.
 		publicDir: false,                // No public resources to copy.
 		cacheDir: '../.vite-cache',      // Relative from root directory.
 
